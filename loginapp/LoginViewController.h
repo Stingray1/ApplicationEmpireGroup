@@ -16,9 +16,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
 - (IBAction)logInButton:(UIButton *)sender;
 - (IBAction)registerButtonAction:(UIButton *)sender;
-@property (weak, nonatomic) IBOutlet UIImageView *gradientImageView;
-@property (weak, nonatomic) IBOutlet UIView *AuthentificationDesignView;
-@property (weak, nonatomic) IBOutlet UIButton *SignInButton;
+@property (weak, nonatomic) IBOutlet UIImageView *signInImage;
+
 
 @end
 

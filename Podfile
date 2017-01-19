@@ -8,6 +8,7 @@ target 'loginapp' do
   # Pods for loginapp
   pod 'AFNetworking', '~> 3.0'
   pod 'Mantle'
+  pod "DXCustomCallout-ObjC"
 
 
 end

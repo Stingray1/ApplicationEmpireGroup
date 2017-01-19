@@ -14,18 +14,21 @@ PODS:
   - AFNetworking/Serialization (3.1.0)
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
-  - Mantle (2.0.7):
-    - Mantle/extobjc (= 2.0.7)
-  - Mantle/extobjc (2.0.7)
+  - DXCustomCallout-ObjC (0.2.0)
+  - Mantle (2.1.0):
+    - Mantle/extobjc (= 2.1.0)
+  - Mantle/extobjc (2.1.0)
 
 DEPENDENCIES:
   - AFNetworking (~> 3.0)
+  - DXCustomCallout-ObjC
   - Mantle
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
-  Mantle: bc40bb061d8c2c6fb48d5083e04d928c3b7f73d9
+  DXCustomCallout-ObjC: fb223603ee148365de51c2d69bb10443943ff89b
+  Mantle: 2fa750afa478cd625a94230fbf1c13462f29395b
 
-PODFILE CHECKSUM: c74ab09e0ea2f8381d4876731a612c9f0d24d226
+PODFILE CHECKSUM: ee50650c298e8d719cf0a0ca5677bc0427481429
 
-COCOAPODS: 1.1.0.rc.2
+COCOAPODS: 1.2.0.beta.1

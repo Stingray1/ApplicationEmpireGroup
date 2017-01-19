@@ -22,19 +22,6 @@
 
 @implementation RegisterViewController
 
-- (void)createPickerToolbarAction {
-    UIToolbar* pickerToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
-    [pickerToolbar setTintColor:[UIColor grayColor]];
-    
-    UIBarButtonItem* doneButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonAction:)];
-    UIBarButtonItem* spaceButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    
-    [pickerToolbar setItems:[NSArray arrayWithObjects:spaceButtonItem, doneButtonItem, nil]];
-    
-    [self.genderTextField setInputAccessoryView:pickerToolbar];
-    [self.dateOfBirthTextField setInputAccessoryView:pickerToolbar];
-    
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -47,7 +34,7 @@
     genderPickerViewData = [[NSMutableArray alloc] initWithObjects:@"Male", @"Female", @"It's complicated", nil];
     //    self.genderTextField.inputView = genderPickerView;
     [self.genderTextField setInputView:genderPickerView];
-    
+    [self.genderTextField setInputAccessoryView:[self createPickerToolbar:0]];
     
     
     
@@ -72,11 +59,47 @@
     [datePicker addTarget:self action:@selector(updateTextFieldAction:) forControlEvents:UIControlEventValueChanged];
     
     [self.dateOfBirthTextField setInputView:datePicker];
-    
-    [self createPickerToolbarAction];
-    
+    [self.dateOfBirthTextField setInputAccessoryView:[self createPickerToolbar:1]];
     
     
+ 
+    
+    
+    
+}
+- (UIToolbar*)createPickerToolbar:(BOOL)nextButton {
+    NSNotification* notification = [[NSNotification alloc] initWithName:UIKeyboardWillShowNotification object:nil userInfo:nil];
+    CGRect keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    UIToolbar* pickerToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, keyboardSize.size.width, 44)];
+    [pickerToolbar setTintColor:[UIColor grayColor]];
+    
+    UIBarButtonItem* doneButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done"
+                                                                       style:UIBarButtonItemStyleDone
+                                                                      target:self
+                                                                      action:@selector(pickerToolbarDoneButtonAction:)];
+    
+    UIBarButtonItem* nextButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Next"
+                                                                       style:UIBarButtonItemStyleDone
+                                                                      target:self
+                                                                      action:@selector(pickerToolbarNextButtonAction:)];
+    
+    UIBarButtonItem* spaceButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    if (nextButton) {
+        [pickerToolbar setItems:[NSArray arrayWithObjects: doneButtonItem, spaceButtonItem, nextButtonItem, nil]];
+    } else {
+        [pickerToolbar setItems:[NSArray arrayWithObjects:spaceButtonItem, doneButtonItem, nil]];
+    }
+    return pickerToolbar;
+}
+- (void)pickerToolbarDoneButtonAction:(id)sender {
+    
+    [self.genderTextField resignFirstResponder];
+    [self.dateOfBirthTextField resignFirstResponder];
+}
+
+- (void)pickerToolbarNextButtonAction:(id)sender {
+    
+    [self.genderTextField becomeFirstResponder];
 }
 
 -(void)viewDidLayoutSubviews
@@ -178,17 +201,20 @@
     // Try to find next responder
     UIResponder *nextResponder = [textField.superview viewWithTag:nextTag];
     
+    
     if (nextResponder) {
         [self.scrollView setContentOffset:CGPointMake(0,textField.center.y-60) animated:YES];
         // Found next responder, so set it.
         [nextResponder becomeFirstResponder];
+       
     } else {
         [self.scrollView setContentOffset:CGPointMake(0,_scrollView.center.y) animated:YES];
         [textField resignFirstResponder];
-        
-        return YES;
     }
-    
+    if(textField == self.confirmPassword)
+    {
+        [self.dateOfBirthTextField becomeFirstResponder];
+    }
     return NO;
 }
 

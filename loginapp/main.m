@@ -15,3 +15,4 @@ int main(int argc, char * argv[]) {
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
     }
 }
+//poate clasa view la care ea apartine da crash ista ?

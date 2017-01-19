@@ -8,14 +8,26 @@
 
 #import "MapViewController.h"
 #import <MapKit/MapKit.h>
+#import "SVPulsingAnnotationView.h"
+#import <DXAnnotationView.h>
+#import <DXAnnotationSettings.h>
 
+//Test
+#import "UserPinView.h"
+#import "MainUserPinView.h"
+#import "CalloutView.h"
 @interface MapViewController () <MKMapViewDelegate,UIImagePickerControllerDelegate,
-                                 UINavigationControllerDelegate,CAAnimationDelegate> {
+                                 UINavigationControllerDelegate,CAAnimationDelegate,CLLocationManagerDelegate> {
 
     
     UILongPressGestureRecognizer* longPressGestureRecognizer;
     MKDirections* directions;
     UIImageView *imageView;
+    MKCircle *circle;
+    CalloutView *mainUserCalloutView;
+    CLLocationManager* locationManager;
+    MKUserLocation* userLocation;
+    CLLocationCoordinate2D touchMapCoordinate;
     
 }
 @end
@@ -27,53 +39,88 @@ static NSString* keyForAnnotation=@"keyforanotation";
 - (void)viewDidLoad {
     
     [super viewDidLoad];
-  
-    self.mapData = [[MapData alloc]init];
-    self.mapData.userDefault =[NSUserDefaults standardUserDefaults];
-    self.mapData.locationManager = [[CLLocationManager alloc] init];
-    if ([self.mapData.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-        [self.mapData.locationManager requestWhenInUseAuthorization];
-    }
-    [self.mapData.locationManager startUpdatingLocation];
+    [self navBarStyle];
+   
+    [self loadLocationManager];
     longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc]
                                                                 initWithTarget:self
                                                                 action:@selector(longPressGestureAction:)];
     [longPressGestureRecognizer setMinimumPressDuration:0.5f];
     [self.mapView addGestureRecognizer:longPressGestureRecognizer];
-    NSLog(@"%f long:%f", [ self.mapData.userDefault doubleForKey:@"lat"],[self.mapData.userDefault doubleForKey:@"long"]);
-    self.mapData.touchMapCoordinate = CLLocationCoordinate2DMake([ self.mapData.userDefault doubleForKey:@"lat"],[ self.mapData.userDefault doubleForKey:@"long"]);
     
-    [self addAnnotations: self.mapData.touchMapCoordinate  withText:nil];
-    //[self.mapView addAnnotation:[userDefault objectForKey:keyForAnnotation]];
-    
+
 }
 
-
+-(void)navBarStyle
+{
+    
+    UIButton *menuBar = [UIButton buttonWithType:UIButtonTypeCustom];
+    menuBar.bounds = CGRectMake( 0, 0, 21,15);
+    [menuBar setImage:[UIImage imageNamed:@"burger menu.png"]
+          forState:UIControlStateNormal];
+    
+    [menuBar addTarget:self
+             action:@selector(barButtonBackPressed)
+            forControlEvents: UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:menuBar];
+    self.navigationBarItem.leftBarButtonItem = leftBarButtonItem;
+    
+    
+    
+    
+}
+-(UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Actions
+-(void)barButtonBackPressed
+{
+    
+}
+#pragma MapDataLoad
+
+-(void)loadLocationManager
+{
+    
+    locationManager = [[CLLocationManager alloc] init];
+    if ([locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+        [locationManager requestWhenInUseAuthorization];
+    }
+    [locationManager startUpdatingLocation];
+}
+
+#pragma mark - LongPressGestureActions
 
 - (void) longPressGestureAction : (UILongPressGestureRecognizer*) longPressGestureRecongnizer {
     
     CGPoint touchPoint = [longPressGestureRecongnizer locationInView:self.mapView];
-     self.mapData.touchMapCoordinate  = [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
-    
+    touchMapCoordinate  = [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
     NSLog(@" %@", NSStringFromCGPoint(touchPoint));
-    NSLog(@"%f, %f",  self.mapData.touchMapCoordinate.latitude,  self.mapData.touchMapCoordinate.longitude);
-    
-    
-    
+    NSLog(@"%f, %f", touchMapCoordinate.latitude,touchMapCoordinate.longitude);
     if (UIGestureRecognizerStateBegan != longPressGestureRecongnizer.state)
+    {
         return;
+    }
+    else {
+    
+        [self addAnnotationFormView];
+        [self.mapView removeGestureRecognizer: longPressGestureRecognizer];
+        }
+}
+
+-(void)addAnnotationFormView
+{
     
     self.subview = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 500)];
     self.subview.center = CGPointMake(self.view.frame.size.width / 2, self.view.frame.size.height /2);
     [self.subview setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:self.subview];
-    
     
     [self fadeInAnimation:self.view];
     
@@ -83,10 +130,8 @@ static NSString* keyForAnnotation=@"keyforanotation";
     self.subview.layer.shadowRadius = 60.0f;
     self.subview.layer.cornerRadius = 10.f;
     self.subview.layer.opacity = 0.95f;
-
-
     
-   //TextView
+    //TextView
     self.textView = [[UITextView alloc] init];
     [self.subview addSubview:self.textView];
     [self.textView setFrame:CGRectMake(0, 0, 300, 145)];
@@ -96,9 +141,8 @@ static NSString* keyForAnnotation=@"keyforanotation";
     [self.textView setFont:[UIFont systemFontOfSize:14.f]];
     self.textView.layer.cornerRadius = 10.f;
     [self.textView becomeFirstResponder];
-
-
-  //Submit button
+    
+    //Submit button
     UIButton* submitButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.subview addSubview:submitButton];
     [submitButton setTitle:@"Submit" forState:UIControlStateNormal];
@@ -106,8 +150,7 @@ static NSString* keyForAnnotation=@"keyforanotation";
     //[submitButton setBackgroundColor:[UIColor purpleColor]];
     [submitButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [submitButton addTarget:self action:@selector(saveAnnotation:)
-                           forControlEvents:UIControlEventTouchUpInside];
-    
+           forControlEvents:UIControlEventTouchUpInside];
     //addPhotoButton
     UIButton* photoButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.subview addSubview:photoButton];
@@ -116,44 +159,13 @@ static NSString* keyForAnnotation=@"keyforanotation";
     [photoButton setBackgroundColor:[UIColor redColor]];
     [photoButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [photoButton addTarget:self action:@selector(addPhotos) forControlEvents:UIControlEventTouchUpInside];
-
     
- //imageView
+    //imageView
     imageView =[[UIImageView alloc]initWithFrame:CGRectMake(0,185,300,270)];
     [imageView setBackgroundColor:[UIColor greenColor]];
     [self.subview addSubview:imageView];
-    [self.mapView removeGestureRecognizer: longPressGestureRecognizer];
 }
 
-
-- (void) addAnnotations: (CLLocationCoordinate2D) touchMapCoordinate withText: (UITextView*) notificationTextView {
-    
-    _pointAnnotation = [[MKPointAnnotation alloc] init];
-    _pointAnnotation.coordinate = touchMapCoordinate;
-    _pointAnnotation.title = @"Notification";
-    _pointAnnotation.subtitle = notificationTextView.text;
-    [self.mapView addAnnotation:_pointAnnotation];
-    
-
-
-}
-
-
-- (void)saveAnnotation:(UIButton*)sender{
-    
-    [self.mapView addGestureRecognizer:longPressGestureRecognizer];
-    [self.textView becomeFirstResponder];
-    [self addAnnotations:  self.mapData.touchMapCoordinate  withText: self.textView];
-    [self fadeInAnimation:self.view];
-    [self.subview removeFromSuperview];
-//    longPressGestureRecognizer.cancelsTouchesInView = YES;
-    
-    [ self.mapData.userDefault setDouble: self.mapData.touchMapCoordinate.latitude forKey:@"lat"];
-    [ self.mapData.userDefault setDouble: self.mapData.touchMapCoordinate.longitude forKey:@"long"];
-    [ self.mapData.userDefault setObject:self.textView.text forKey:@"text"];
-    [ self.mapData.userDefault synchronize];
-    
-}
 -(void)addPhotos
 {
     UIImagePickerController *imagePickerController = [[UIImagePickerController alloc]init];
@@ -161,29 +173,167 @@ static NSString* keyForAnnotation=@"keyforanotation";
     [self presentViewController:imagePickerController animated:YES completion:nil];
     imagePickerController.allowsEditing = YES;
     imagePickerController.delegate = self;
+    
+}
 
+#pragma Control photos Delegate
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
+{
+    UIImage *image =[info objectForKey:UIImagePickerControllerOriginalImage];
+    [imageView setImage:image];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+#pragma AnnotationView
+
+- (void) addAnnotations: (CLLocationCoordinate2D) touchMapCoordinate withText: (UITextView*) notificationTextView {
+    
+    _pointAnnotation = [[MKPointAnnotation alloc] init];
+    _pointAnnotation.coordinate = touchMapCoordinate;
+    _pointAnnotation.title = @"Notification";
+    _pointAnnotation.subtitle = notificationTextView.text;
+
+    [self.mapView addAnnotation:_pointAnnotation];
+    
+}
+
+- (void)saveAnnotation:(UIButton*)sender{
+    
+    [self.mapView addGestureRecognizer:longPressGestureRecognizer];
+    [self.textView becomeFirstResponder];
+    [self addAnnotations: touchMapCoordinate  withText: self.textView];
+    [self fadeInAnimation:self.view];
+    [self.subview removeFromSuperview];
+    
 }
 
 - (void) removeAnnotationAction: (UIButton*) sender {
     
- UIAlertController* removeAnnotationAlertController = [UIAlertController alertControllerWithTitle:@"Remove annotation" message:@"Do you really want to remove this annotation ?" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController* removeAnnotationAlertController = [UIAlertController
+                                                       alertControllerWithTitle:@"Remove annotation"
+                                                       message:@"Do you really want to remove this annotation ?"
+                                                       preferredStyle:UIAlertControllerStyleAlert];
     
-    UIAlertAction* removeAction = [UIAlertAction actionWithTitle:@"Remove" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertAction* removeAction = [UIAlertAction
+                                                 actionWithTitle:@"Remove"
+                                                 style:UIAlertActionStyleDestructive
+                                                 handler:^(UIAlertAction * _Nonnull action) {
         [self.mapView removeAnnotation:_pointAnnotation];
         [self.mapView removeOverlays:self.mapView.overlays];
-
     }];
     
-    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+        UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+                                                 style:UIAlertActionStyleCancel
+                                                 handler:nil];
     
-    [removeAnnotationAlertController addAction:removeAction];
-    [removeAnnotationAlertController addAction:cancelAction];
+        [removeAnnotationAlertController addAction:removeAction];
+        [removeAnnotationAlertController addAction:cancelAction];
     
-    [self presentViewController:removeAnnotationAlertController animated:YES completion:nil];
+        [self presentViewController:removeAnnotationAlertController animated:YES completion:nil];
     
     
 }
 
+#pragma mark - MKMapViewDelegate
+
+- (void) mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
+    
+   MKMapCamera* camera = [MKMapCamera
+                          cameraLookingAtCenterCoordinate:userLocation.coordinate
+                          fromEyeCoordinate:CLLocationCoordinate2DMake(userLocation.coordinate.latitude, userLocation.coordinate.longitude)
+                          eyeAltitude:10000];
+    
+   [self.mapView setCamera:camera animated:YES];
+}
+
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
+    
+
+    UIImageView *pinView = nil;
+    if ([annotation isKindOfClass:[MKUserLocation class]]){
+        
+          static NSString *identifier = @"currentLocation";
+          SVPulsingAnnotationView*  pulsingView = [[SVPulsingAnnotationView alloc]
+                                                   initWithAnnotation:annotation
+                                                   reuseIdentifier:identifier];
+        
+            MainUserPinView *mainUserPinView = [[[ NSBundle mainBundle]
+                                                  loadNibNamed:@"MainUserPinView"
+                                                  owner:self
+                                                  options:nil] lastObject];
+            pulsingView.draggable=YES;
+            UIImage *image1 =[self ChangeViewToImage:mainUserPinView];
+            pulsingView.centerOffset = CGPointMake(0, -16.5f);
+            [pulsingView setImage:image1];
+            pulsingView.pulseColor =[UIColor redColor];
+            pulsingView.canShowCallout = YES;
+            return pulsingView;
+    }
+    else{
+
+        CalloutView *userCalloutView = [[[NSBundle mainBundle]
+                                            loadNibNamed:@"CalloutView"
+                                            owner:self
+                                            options:nil] lastObject];
+        userCalloutView.photoObject.image = imageView.image;
+        userCalloutView.infoObect.text = _pointAnnotation.subtitle;
+        
+        UserPinView *userPinView = [[[ NSBundle mainBundle]
+                                        loadNibNamed:@"UserPinView"
+                                        owner:self
+                                        options:nil]lastObject];
+        
+        pinView =[[UIImageView alloc]initWithImage:[self ChangeViewToImage:userPinView]];
+        
+        DXAnnotationView *annotationView = (DXAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:NSStringFromClass([DXAnnotationView class])];
+        if (!annotationView) {
+            annotationView = [[DXAnnotationView alloc] initWithAnnotation:annotation
+                                                          reuseIdentifier:NSStringFromClass([DXAnnotationView class])
+                                                                  pinView:pinView
+                                                              calloutView:userCalloutView
+                                                                 settings:[DXAnnotationSettings defaultSettings]];
+        }
+        annotationView.draggable = YES;
+        return annotationView;
+    }
+    return nil;
+}
+
+- (void) mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
+    
+    _pointAnnotation = view.annotation;
+    
+}
+#pragma ConvertorViewToImage
+-(UIImage *) ChangeViewToImage : (UIView *) view{
+    
+    UIGraphicsBeginImageContextWithOptions(view.bounds.size,NO,0.0f);
+    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    
+    return img;
+}
+
+#pragma renderingForOverlay
+-(MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay {
+    
+    if ([overlay isKindOfClass:[MKPolyline class]]) {
+        MKPolylineRenderer* polylineRenderer = [[MKPolylineRenderer alloc]
+                                                 initWithOverlay:overlay];
+        polylineRenderer.lineWidth = 2.f;
+        polylineRenderer.strokeColor = [UIColor redColor];
+        return polylineRenderer;
+    }
+    return nil;
+}
+#pragma BuildPath
 
 - (void) buildPathAction{
     
@@ -219,81 +369,6 @@ static NSString* keyForAnnotation=@"keyforanotation";
     }];
 }
 
-#pragma Controol photos Delegate
--(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
-{
-    UIImage *image =[info objectForKey:UIImagePickerControllerOriginalImage];
-    [imageView setImage:image];
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
--(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-
-#pragma mark - MKMapViewDelegate
-
-- (void) mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
-    MKMapCamera* camera = [MKMapCamera cameraLookingAtCenterCoordinate:userLocation.coordinate fromEyeCoordinate:CLLocationCoordinate2DMake(userLocation.coordinate.latitude, userLocation.coordinate.longitude) eyeAltitude:10000];
-        [self.mapView setCamera:camera animated:YES];
-    
-    
-//        CLLocation *lock =[[CLLocation alloc] initWithLatitude:_pointAnnotation.coordinate.latitude longitude:_pointAnnotation.coordinate.longitude];
-//        CLLocationDistance dist = [self.mapView.userLocation.location distanceFromLocation:lock]/1000;
-//        NSLog(@"Distanta este %f  metri",dist);
-    
-}
-
-- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
-    
-    if ([annotation isKindOfClass: [MKUserLocation class]]) {
-        return nil;
-    }
-    
-    MKPinAnnotationView* pinAnnotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"identifer"];
-    pinAnnotationView.animatesDrop = YES;
-    pinAnnotationView.canShowCallout = YES;
-
-//    CUSTOM PIN IMAGE
-//    pinAnnotationView.image = [UIImage imageNamed:@"gps-3.png"];
-//    pinAnnotationView.centerOffset = CGPointMake(0, -32);
-//    pinAnnotationView.layer.shadowColor = [UIColor blackColor].CGColor;
-//    pinAnnotationView.layer.shadowOffset = CGSizeMake(20, 0);
-//    pinAnnotationView.layer.shadowOpacity = 0.5;
-//    pinAnnotationView.layer.shadowRadius = 3.0;
-    
-    UIButton* removeAnnotationButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-    [removeAnnotationButton addTarget:self action:@selector(removeAnnotationAction:) forControlEvents:UIControlEventTouchUpInside];
-    pinAnnotationView.leftCalloutAccessoryView = removeAnnotationButton;
-
-//    PATH BUTTON
-    UIButton* pathAnnotationButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
-    [pathAnnotationButton addTarget:self action:@selector(buildPathAction) forControlEvents:UIControlEventTouchUpInside];
-    pinAnnotationView.rightCalloutAccessoryView = pathAnnotationButton;
-    
-    
-    return pinAnnotationView;
-}
-
-- (void) mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
-    
-    _pointAnnotation = view.annotation;
-}
-
-
--(MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay {
-    
-    if ([overlay isKindOfClass:[MKPolyline class]]) {
-        MKPolylineRenderer* polylineRenderer = [[MKPolylineRenderer alloc] initWithOverlay:overlay];
-        polylineRenderer.lineWidth = 2.f;
-        polylineRenderer.strokeColor = [UIColor redColor];
-        
-        return polylineRenderer;
-    }
-    return nil;
-}
-
 #pragma mark - Animation
 
 -(void)fadeInAnimation:(UIView *)aView {
@@ -311,17 +386,6 @@ static NSString* keyForAnnotation=@"keyforanotation";
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     [self.view endEditing:YES];
 }
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 #pragma mark - Dealloc
 

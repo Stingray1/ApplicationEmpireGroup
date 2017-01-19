@@ -8,24 +8,22 @@
 
 #import "LoginViewController.h"
 #import "RegisterViewController.h"
+#import "UtilitiesGradient.h"
+#import "MapViewController.h"
 @interface LoginViewController () <UITabBarDelegate>
-{
-    CAGradientLayer *gradientLayer;
-}
+
 
 @end
 
 @implementation LoginViewController
-
-
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     loginDictionary = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"user", nil]
                                                   forKeys:[NSArray arrayWithObjects:@"user", nil]];
-
-    [self designSketch];
     
+   
+     [UtilitiesGradient designSketch:self.signInImage];
    
     
     
@@ -33,22 +31,7 @@
 
 
 }
-#pragma mark - Navigation Bar
--(void)designSketch
-{
-    gradientLayer =[CAGradientLayer layer];
-    gradientLayer.colors = @[(id)[[UIColor colorWithRed:(151/255.0) green:(157/255.0) blue:(183/255.0) alpha:0.9] CGColor],
-                             (id)[[UIColor colorWithRed:(146/255.0) green:(159/255.0) blue:(182/255.0) alpha:0.9] CGColor],
-                             (id)[[UIColor colorWithRed:(145/255.0) green:(170/255.0) blue:(194/255.0) alpha:0.9] CGColor]];
-    [self.gradientImageView.layer addSublayer:gradientLayer];
-    
-    self.AuthentificationDesignView.layer.cornerRadius = 7;
-    self.AuthentificationDesignView.layer.masksToBounds = YES;
-    self.SignInButton.layer.cornerRadius = 7;
-    self.SignInButton.layer.masksToBounds = YES;
-    
 
-}
 - (void)viewWillAppear:(BOOL)animated {
     [self.navigationController setNavigationBarHidden:YES animated:animated];
     [super viewWillAppear:animated];
@@ -60,7 +43,7 @@
 }
 -(void)viewDidLayoutSubviews
 {
-    gradientLayer.frame = self.gradientImageView.bounds;
+   
 
 }
 -(UIStatusBarStyle)preferredStatusBarStyle
@@ -75,10 +58,9 @@
     if ([[loginDictionary objectForKey: self.passwordField.text] isEqualToString:self.usernameField.text]) {
         NSLog(@"Succes");
         
-        UITabBarController* tabBar =  [self.storyboard instantiateViewControllerWithIdentifier:@"UITabBarController"];
-        [self presentViewController:tabBar animated:YES completion:nil];
+        MapViewController* mapView =  [self.storyboard instantiateViewControllerWithIdentifier:@"MapViewController"];
+        [self presentViewController:mapView animated:YES completion:nil];
 
-        
     } else {
         NSLog(@"Unsucces");
         NSLog(@"%@", self.usernameField.text);

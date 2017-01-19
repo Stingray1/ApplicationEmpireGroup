@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="iN0-l3-epB" customClass="UserPinView">
+            <rect key="frame" x="0.0" y="0.0" width="27" height="36"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pin.png" translatesAutoresizingMaskIntoConstraints="NO" id="K4V-It-IAA">
+                    <rect key="frame" x="3" y="1" width="21" height="35"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="K4V-It-IAA" secondAttribute="height" multiplier="3:5" id="iHf-zh-BZ9"/>
+                    </constraints>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Ellipse 2.png" translatesAutoresizingMaskIntoConstraints="NO" id="5Iz-pE-xab">
+                    <rect key="frame" x="0.0" y="0.0" width="27" height="27"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="5Iz-pE-xab" secondAttribute="height" multiplier="1:1" id="YWB-W9-2yU"/>
+                    </constraints>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img.png" translatesAutoresizingMaskIntoConstraints="NO" id="F2o-Y1-Fze">
+                    <rect key="frame" x="0.5" y="0.0" width="26" height="26"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="F2o-Y1-Fze" secondAttribute="height" multiplier="1:1" id="Ljb-80-J5X"/>
+                    </constraints>
+                </imageView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="K4V-It-IAA" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="AHr-hx-eez"/>
+                <constraint firstItem="F2o-Y1-Fze" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="TPe-QM-V6H"/>
+                <constraint firstAttribute="bottom" secondItem="K4V-It-IAA" secondAttribute="bottom" id="WRF-a5-BN2"/>
+                <constraint firstItem="5Iz-pE-xab" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="f2w-vQ-9qi"/>
+                <constraint firstItem="F2o-Y1-Fze" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="-5" id="lkb-OL-5Nb"/>
+                <constraint firstItem="K4V-It-IAA" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="mUN-Dm-eBQ"/>
+                <constraint firstItem="5Iz-pE-xab" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="-4.5" id="tiL-oP-z1e"/>
+                <constraint firstItem="F2o-Y1-Fze" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="yac-89-Db9"/>
+                <constraint firstItem="5Iz-pE-xab" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="ykv-hU-rvg"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="33.5" y="109.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="Ellipse 2.png" width="60" height="60"/>
+        <image name="img.png" width="54" height="54"/>
+        <image name="pin.png" width="51" height="73"/>
+    </resources>
+</document>

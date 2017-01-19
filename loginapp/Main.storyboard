@@ -84,8 +84,14 @@
                                     <constraint firstItem="AZJ-zZ-Y4p" firstAttribute="centerX" secondItem="HLP-eR-NQ3" secondAttribute="centerX" id="zSv-dM-XhF"/>
                                     <constraint firstItem="D7b-zb-fs6" firstAttribute="width" secondItem="vm1-tI-mQG" secondAttribute="width" id="zWr-3T-WBX"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.maskToBounds" value="YES"/>
+                                </userDefinedRuntimeAttributes>
                             </view>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Layer 1.png" translatesAutoresizingMaskIntoConstraints="NO" id="cMX-cz-qkq">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Layer 1.png" translatesAutoresizingMaskIntoConstraints="NO" id="cMX-cz-qkq">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="300"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="cMX-cz-qkq" secondAttribute="height" multiplier="5:4" id="loU-mU-gfp"/>
@@ -110,12 +116,18 @@
                                 <state key="normal" title="Sign In">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.maskToBounds" value="YES"/>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="logInButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="98L-aJ-gpk"/>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dqI-RG-vhX" userLabel="LogoView">
-                                <rect key="frame" x="128" y="54.5" width="120" height="160"/>
+                                <rect key="frame" x="128" y="55" width="120" height="160"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="-social twist-.png" translatesAutoresizingMaskIntoConstraints="NO" id="jFc-dP-5Z0">
                                         <rect key="frame" x="0.0" y="80" width="120" height="80"/>
@@ -190,10 +202,8 @@
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
-                        <outlet property="AuthentificationDesignView" destination="HLP-eR-NQ3" id="dG5-Y4-ozq"/>
-                        <outlet property="SignInButton" destination="x9k-U9-MLt" id="iuu-aQ-pGw"/>
-                        <outlet property="gradientImageView" destination="cMX-cz-qkq" id="CwA-hj-Alh"/>
                         <outlet property="passwordField" destination="D7b-zb-fs6" id="f3i-j2-74U"/>
+                        <outlet property="signInImage" destination="cMX-cz-qkq" id="ty4-v4-YoY"/>
                         <outlet property="usernameField" destination="vm1-tI-mQG" id="nU9-qw-20W"/>
                     </connections>
                 </viewController>
@@ -201,36 +211,104 @@
             </objects>
             <point key="canvasLocation" x="703.5" y="365.5"/>
         </scene>
-        <!--Map View Controller-->
+        <!--News-->
         <scene sceneID="Gv1-90-2K7">
             <objects>
-                <viewController storyboardIdentifier="MapViewController" title="Map View Controller" id="231-xf-sNM" customClass="MapViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MapViewController" title="News" id="231-xf-sNM" customClass="MapViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="1VE-fQ-Ibm"/>
                         <viewControllerLayoutGuide type="bottom" id="Usj-hP-BKU"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="vUj-uu-pVa">
+                    <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="vUj-uu-pVa">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b1j-Fp-mK6">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fDX-OC-NFk">
+                                <rect key="frame" x="0.0" y="612" width="375" height="55"/>
+                                <subviews>
+                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0lL-7l-7Vi">
+                                        <rect key="frame" x="279" y="18" width="20" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" backgroundImage="pen.png"/>
+                                    </button>
+                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LPf-5G-kov">
+                                        <rect key="frame" x="179" y="19" width="20" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="localization.png"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleAspectFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MY5-8O-49g">
+                                        <rect key="frame" x="79" y="18" width="20" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" backgroundImage="photo camera.png"/>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="fDX-OC-NFk" secondAttribute="height" multiplier="75:11" id="vlc-jB-6f5"/>
+                                </constraints>
+                            </view>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b1j-Fp-mK6">
+                                <rect key="frame" x="0.0" y="112" width="375" height="500"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="b1j-Fp-mK6" secondAttribute="height" multiplier="3:4" id="vCg-v0-5f7"/>
+                                </constraints>
                                 <connections>
                                     <outlet property="delegate" destination="231-xf-sNM" id="t1H-qr-NJl"/>
                                 </connections>
                             </mapView>
+                            <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hAh-cv-QWa">
+                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="hAh-cv-QWa" secondAttribute="height" multiplier="375:44" id="I3z-0o-Zy9"/>
+                                </constraints>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="barTintColor" red="0.60784313725490191" green="0.72941176470588232" blue="0.80392156862745101" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <textAttributes key="titleTextAttributes">
+                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </textAttributes>
+                                <items>
+                                    <navigationItem title="News" id="M3K-kR-A4N">
+                                        <barButtonItem key="rightBarButtonItem" systemItem="search" id="Oqf-nL-VcA"/>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mpP-pf-Htl">
+                                <rect key="frame" x="0.0" y="64" width="375" height="48"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="mpP-pf-Htl" secondAttribute="height" multiplier="125:16" id="5gj-mm-dG9"/>
+                                </constraints>
+                            </view>
                         </subviews>
-                        <color key="backgroundColor" red="0.23846414823468992" green="0.24037714817246458" blue="0.51728157722513091" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.60784313725490191" green="0.72941176470588232" blue="0.80392156862745101" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="b1j-Fp-mK6" secondAttribute="trailing" id="06V-1z-Ihv"/>
+                            <constraint firstItem="hAh-cv-QWa" firstAttribute="top" secondItem="1VE-fQ-Ibm" secondAttribute="bottom" id="49Q-R5-vZj"/>
+                            <constraint firstItem="mpP-pf-Htl" firstAttribute="top" secondItem="hAh-cv-QWa" secondAttribute="bottom" id="64Y-U1-cbw"/>
+                            <constraint firstItem="fDX-OC-NFk" firstAttribute="top" secondItem="b1j-Fp-mK6" secondAttribute="bottom" id="VEZ-4L-vBL"/>
+                            <constraint firstItem="hAh-cv-QWa" firstAttribute="leading" secondItem="vUj-uu-pVa" secondAttribute="leading" id="WLE-NT-1fk"/>
+                            <constraint firstAttribute="trailing" secondItem="fDX-OC-NFk" secondAttribute="trailing" id="fTc-J0-hL2"/>
+                            <constraint firstItem="fDX-OC-NFk" firstAttribute="leading" secondItem="vUj-uu-pVa" secondAttribute="leading" id="khI-cH-KX6"/>
+                            <constraint firstAttribute="trailing" secondItem="hAh-cv-QWa" secondAttribute="trailing" id="nOO-TG-LSd"/>
+                            <constraint firstItem="mpP-pf-Htl" firstAttribute="leading" secondItem="vUj-uu-pVa" secondAttribute="leading" id="oeU-7d-Rpo"/>
+                            <constraint firstItem="b1j-Fp-mK6" firstAttribute="top" secondItem="mpP-pf-Htl" secondAttribute="bottom" id="qZJ-vs-tI7"/>
+                            <constraint firstItem="b1j-Fp-mK6" firstAttribute="leading" secondItem="vUj-uu-pVa" secondAttribute="leading" id="qhH-3a-1Nu"/>
+                            <constraint firstAttribute="trailing" secondItem="mpP-pf-Htl" secondAttribute="trailing" id="vKq-md-Pvb"/>
+                        </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Map" id="gDf-rU-05Q"/>
+                    <navigationItem key="navigationItem" id="xxK-sX-bhZ"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="mapView" destination="b1j-Fp-mK6" id="ZXg-cL-PAc"/>
+                        <outlet property="navigationBarItem" destination="M3K-kR-A4N" id="Qs2-0q-n60"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OKH-a6-EZ9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1740" y="1220"/>
+            <point key="canvasLocation" x="1951.5" y="1270.5"/>
         </scene>
         <!--Register View Controller-->
         <scene sceneID="p9R-LO-7lQ">
@@ -524,8 +602,10 @@
         <!--Tab Bar Controller-->
         <scene sceneID="bMa-7d-D6L">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mAV-wM-dCf" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tabBarController storyboardIdentifier="UITabBarController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="jb7-qa-9r0" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="ACs-IK-YmX"/>
+                    <nil key="simulatedTopBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="07Q-Zb-Zbw">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -534,10 +614,8 @@
                     <connections>
                         <segue destination="Rkm-16-eCP" kind="relationship" relationship="viewControllers" id="K8H-CN-Zgx"/>
                         <segue destination="9t9-iP-FEc" kind="relationship" relationship="viewControllers" id="feS-0k-70E"/>
-                        <segue destination="231-xf-sNM" kind="relationship" relationship="viewControllers" id="XP3-1h-fuJ"/>
                     </connections>
                 </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="mAV-wM-dCf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1146" y="367"/>
         </scene>
@@ -654,7 +732,10 @@
         <image name="Layer 1.png" width="750" height="597"/>
         <image name="SignupTopImage.png" width="750" height="401"/>
         <image name="arrowbutton.png" width="12" height="19"/>
+        <image name="localization.png" width="40" height="40"/>
         <image name="logiIcon.png" width="105" height="111"/>
+        <image name="pen.png" width="34" height="33"/>
+        <image name="photo camera.png" width="41" height="32"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

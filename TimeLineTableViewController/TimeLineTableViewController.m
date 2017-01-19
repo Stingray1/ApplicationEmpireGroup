@@ -9,7 +9,6 @@
 #import "TimeLineTableViewController.h"
 #import "TimeLineTableViewCell.h"
 #import "MapViewController.h"
-#import "MapData.h"
 #import "TimeLineCellViewController.h"
 @interface TimeLineTableViewController () <UITableViewDataSource,UITableViewDelegate ,UITabBarDelegate>
 
@@ -52,22 +51,6 @@
 
 -(void)showMapAction:(UIButton*)sender
 {
-    NSIndexPath *myIndex= [NSIndexPath indexPathForRow:sender.tag inSection:0];
-    TimeLineTableViewCell *cell =[self.timelineTableView cellForRowAtIndexPath:myIndex];
-    NSLog(@"numele este %@",cell.dataLabel.text);
-    NSLog(@"Id-ul este %ld",(long)sender.tag);
-
-    MapViewController *viewControllerB = [self.storyboard instantiateViewControllerWithIdentifier:@"MapViewController"];
-    viewControllerB.text=@"Vadim";
-    viewControllerB.mapData=[[MapData alloc]init];
-    viewControllerB.mapData.text=@"Cadim";
-    viewControllerB.mapData.userDefault =[NSUserDefaults standardUserDefaults];
-    viewControllerB.mapData.touchMapCoordinate =CLLocationCoordinate2DMake([ viewControllerB.mapData.userDefault doubleForKey:@"lat"],[viewControllerB.mapData.userDefault doubleForKey:@"long"]);
-    viewControllerB.pointAnnotation = [[MKPointAnnotation alloc] init];
-    viewControllerB.pointAnnotation.coordinate=viewControllerB.mapData.touchMapCoordinate;
-    [viewControllerB buildPathAction];
-    [self.navigationController pushViewController:viewControllerB animated:YES];
-
     
 }
 
